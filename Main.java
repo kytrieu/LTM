@@ -7,10 +7,10 @@ public class Main{
         String sh = "36.50.135.242";
         int sp = 2207;
         String qc = "UIhzvOOP";
-        String sc = "B23DCNC476";
+        String sc = "B23DCCN476";
         
         try(DatagramSocket sk = new DatagramSocket()) {
-            String mess = ";" + qc + ";" + sc;
+            String mess = ";" + sc + ";" + qc;
             byte[] sd = mess.getBytes();
             InetAddress sa  = InetAddress.getByName(sh);
             DatagramPacket dp = new DatagramPacket(
@@ -36,16 +36,27 @@ public class Main{
             
             String id = parts[0];
             String[] nums = parts[1].split(",");
-            
-            
-            String ans = id + ";";
+            // process
+            int maxval = Integer.MIN_VALUE;
+            int minval = Integer.MAX_VALUE;
+            for(String n : nums) {
+                int num = Integer.parseInt(n.trim());
+                if (num > maxval) {
+                    maxval = num;
+                }
+                if (num < minval ){
+                    minval = num;
+                }
+            }
+            // merge
+            String ans = id + ";" + maxval + "," + minval;
             
             byte[] ad = ans.getBytes();
             DatagramPacket ap = new DatagramPacket(
                     ad,
                     ad.length,
                     rp.getAddress(),
-                    rp.getLength()
+                    rp.getPort()
             );
             
             sk.send(ap);
